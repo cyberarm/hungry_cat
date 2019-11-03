@@ -139,8 +139,8 @@ class Dog < Entity
     x = @velocity.x > 0 ? @position.x.floor / 16 + 1 : @position.x.floor / 16
 
     floor = @context.levels[@context.current_level].find do |sprite|
-      sprite.x.floor / 16 == x &&
-      sprite.y.floor / 16 == @position.y.floor / 16 + 1
+      (sprite.x.floor / 16).floor == x.floor &&
+      (sprite.y.floor / 16).floor == (@position.y.floor / 16 + 1).floor
     end
 
     return floor
