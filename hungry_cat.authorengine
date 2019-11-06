@@ -311,13 +311,18 @@ class GameState
 end
 
 class HungryCatGame < GameState
-  attr_reader :current_level, :context, :level
+  attr_reader :current_level, :context, :level, :lowest_point
 
   def setup
     @current_level = @options[:current_level]
 
-    @level = @context.levels[@current_level].sort_by {|sprite| sprite.z}.map  do |sprite|
-      sprite.dup
+    @level = @context.levels[@current_level].sort_by {|sprite| sprite.z}.map do |sprite|
+      if RUBY_ENGINE == "opal"
+        # Struct.dup is broken it seems...
+        AuthorEngine::Sprite.new(sprite.sprite, sprite.x, sprite.y, sprite.z)
+      else
+        sprite.dup
+      end
     end
 
     @offset = Entity::Vector.new(0, 0)
@@ -378,10 +383,6 @@ class HungryCatGame < GameState
 
   def eat_taco(taco)
     @entities.delete(taco)
-  end
-
-  def lowest_point
-    @lowest_point
   end
 
   def setup_level
@@ -552,6 +553,10 @@ end
 
 def game_state=(state)
   @game_state = state
+end
+
+def game_state
+  @game_state
 end
 ___SPRITES___
 512x128
