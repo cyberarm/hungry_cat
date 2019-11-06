@@ -121,14 +121,19 @@ class Dog < Entity
   def setup
     @speed = 3.5
     @direction = 1
+
+    @sat_at = @context.milliseconds
+    @sit_time = 1_000
   end
 
   def update(dt)
     super
 
-    @velocity.x += (@speed * dt) * @direction
+    if @context.milliseconds > @sat_at + @sit_time
+      @velocity.x += (@speed * dt) * @direction
 
-    change_direction?
+      change_direction?
+    end
   end
 
   def change_direction?
@@ -136,6 +141,7 @@ class Dog < Entity
       @direction *= -1
 
       @velocity.x = 0
+      @sat_at = @context.milliseconds
     end
   end
 
