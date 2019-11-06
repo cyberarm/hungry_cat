@@ -252,7 +252,6 @@ class Cat < Entity
     @last_lost_life = @context.milliseconds
     @last_flash_at = @context.milliseconds
     @visible = false
-    puts "triggered"
   end
 
   def die?
